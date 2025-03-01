@@ -14,4 +14,14 @@ func main() {
 	}
 	defer listener.Close()
 	fmt.Println("Server started on :8080")
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			fmt.Println("Failed to accept connection:", err)
+			continue
+		}
+
+		// go handleConnection(conn)
+	}
 }
