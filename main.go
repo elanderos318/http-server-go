@@ -22,6 +22,13 @@ func main() {
 			continue
 		}
 
-		// go handleConnection(conn)
+		go handleConnection(conn)
 	}
+}
+
+func handleConnection(conn net.Conn) {
+	defer conn.Close()
+
+	// Print connection info
+	fmt.Printf("New connection from %s\n", conn.RemoteAddr().String())
 }
