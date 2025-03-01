@@ -16,6 +16,7 @@ func main() {
 	fmt.Println("Server started on :8080")
 
 	for {
+		fmt.Println("Waiting for connection...")
 		conn, err := listener.Accept()
 		if err != nil {
 			fmt.Println("Failed to accept connection:", err)
