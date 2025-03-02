@@ -71,4 +71,25 @@ func parseHttpRequest(request string) (method, path string, headers map[string]s
 			path = requestLineParts[1]
 		}
 	}
+
+	// find where headers end and body begins
+	headerBodySplit := -1
+	for i, line := range lines {
+		if line == "" {
+			headerBodySplit = i
+			break
+		}
+	}
+
+	// parse headers (skip first line which is the request line)
+	for i :=1; i < headerBodySplit; i++ {
+		if lines[i] == "" {
+			continue
+		}
+
+		parts := strings.SplitN(lines[i], ": ", 2)
+		if len(parts) == 2 {
+			headers[parts[0]] = parts[1]
+		}
+	}
 }
