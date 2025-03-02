@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"strings"
 )
 
 func main() {
@@ -56,5 +57,18 @@ func handleConnection(conn net.Conn) {
 
 // parseHttpRequest parses an HTTP request string into its components
 func parseHttpRequest(request string) (method, path string, headers map[string]string, body string) {
-	
+	// initialize the headers map
+	headers = make(map[string]string)
+
+	// split the request into lines
+	lines := strings.Split(request, "\r\n")
+
+	// parse the request lien (first line)
+	if len(lines) > 0 {
+		requestLineParts := strings.Split(lines[0], " ")
+		if len(requestLineParts) >= 3 {
+			method = requestLineParts[0]
+			path = requestLineParts[1]
+		}
+	}
 }
