@@ -46,6 +46,15 @@ func handleConnection(conn net.Conn) {
 	fmt.Println(string(buffer[:n]))
 
 	// send a response
-	response := "Hello from server!\n"
+	response := "HTTP/1.1 200 OK\r\n" +
+		"Content-Type: text/plain\r\n" +
+		"Content-Length: 18\r\n" +
+		"\r\n" +
+		"Hello from server!\n"
 	conn.Write([]byte(response))
+}
+
+// parseHttpRequest parses an HTTP request string into its components
+func parseHttpRequest(request string) (method, path string, headers map[string]string, body string) {
+	
 }
