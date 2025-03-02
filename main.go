@@ -92,4 +92,11 @@ func parseHttpRequest(request string) (method, path string, headers map[string]s
 			headers[parts[0]] = parts[1]
 		}
 	}
+
+	// Parse body (everything after the empty line)
+	if headerBodySplit > 0 && headerBodySplit < len(lines) - 1 {
+		body = strings.Join(lines[headerBodySplit + 1:], "\r\n")
+	}
+
+	return method, path, headers, body
 }
