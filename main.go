@@ -6,6 +6,29 @@ import (
 	"strings"
 )
 
+// Route represents a server route with a handler function
+type Route struct {
+	method  string
+	path    string
+	handler func(request *Request, response *Response)
+}
+
+// Request represents an HTTP request
+type Request struct {
+	Method      string
+	Path        string
+	Headers     map[string]string
+	Body        string
+	QueryParams map[string]string
+}
+
+// Response represents an HTTP response
+type Response struct {
+	StatusCode int
+	Headers    map[string]string
+	Body       string
+}
+
 func main() {
 	// create a tcp listener on port 8080
 	listener, err := net.Listen("tcp", "localhost:8080")
@@ -92,7 +115,7 @@ func parseHttpRequest(request string) (method, path string, headers map[string]s
 	}
 
 	// parse headers (skip first line which is the request line)
-	for i :=1; i < headerBodySplit; i++ {
+	for i := 1; i < headerBodySplit; i++ {
 		if lines[i] == "" {
 			continue
 		}
@@ -104,8 +127,8 @@ func parseHttpRequest(request string) (method, path string, headers map[string]s
 	}
 
 	// Parse body (everything after the empty line)
-	if headerBodySplit > 0 && headerBodySplit < len(lines) - 1 {
-		body = strings.Join(lines[headerBodySplit + 1:], "\r\n")
+	if headerBodySplit > 0 && headerBodySplit < len(lines)-1 {
+		body = strings.Join(lines[headerBodySplit+1:], "\r\n")
 	}
 
 	return method, path, headers, body
