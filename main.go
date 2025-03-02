@@ -41,6 +41,15 @@ func NewServer() *Server {
 	}
 }
 
+// AddRoute adds a new route to the server
+func (s *Server) AddRoute(method, path string, handler func(request *Request, response *Response)) {
+	s.routes = append(s.routes, Route{
+		method:  method,
+		path:    path,
+		handler: handler,
+	})
+}
+
 func main() {
 	// create a tcp listener on port 8080
 	listener, err := net.Listen("tcp", "localhost:8080")
