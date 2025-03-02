@@ -42,14 +42,24 @@ func handleConnection(conn net.Conn) {
 		return
 	}
 
+	request := string(buffer[:n])
+	fmt.Printf("Received request:\n%s\n", request)
+
+	method, path, headers, body := parseHttpRequest(request)
+
+	fmt.Printf("Method: %s\n", method)
+	fmt.Printf("Path: %s\n", path)
+	fmt.Printf("Number of headers: %d\n", len(headers))
+	fmt.Printf("Body length: %d bytes\n", len(body))
+
 	// print the data received
 	fmt.Printf("Received %d bytes\n", n)
-	fmt.Println(string(buffer[:n]))
+	fmt.Println(request)
 
 	// send a response
 	response := "HTTP/1.1 200 OK\r\n" +
 		"Content-Type: text/plain\r\n" +
-		"Content-Length: 18\r\n" +
+		"Content-Length: 13\r\n" +
 		"\r\n" +
 		"Hello from server!\n"
 	conn.Write([]byte(response))
