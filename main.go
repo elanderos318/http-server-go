@@ -29,6 +29,18 @@ type Response struct {
 	Body       string
 }
 
+// Server represents the HTTP server
+type Server struct {
+	routes []Route
+}
+
+// NewServer creates a new server instance
+func NewServer() *Server {
+	return &Server{
+		routes: []Route{},
+	}
+}
+
 func main() {
 	// create a tcp listener on port 8080
 	listener, err := net.Listen("tcp", "localhost:8080")
