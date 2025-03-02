@@ -76,7 +76,7 @@ func parseHttpRequest(request string) (method, path string, headers map[string]s
 	// parse the request lien (first line)
 	if len(lines) > 0 {
 		requestLineParts := strings.Split(lines[0], " ")
-		if len(requestLineParts) >= 3 {
+		if len(requestLineParts) >= 2 {
 			method = requestLineParts[0]
 			path = requestLineParts[1]
 		}
