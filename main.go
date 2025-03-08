@@ -50,6 +50,13 @@ func (s *Server) AddRoute(method, path string, handler func(request *Request, re
 	})
 }
 
+// parseQueryParams parses query parameters from a URL path
+func parseQueryParams(path string) (string, map[string]string) {
+	params := make(map[string]string)
+
+	//
+}
+
 func main() {
 	// create a tcp listener on port 8080
 	listener, err := net.Listen("tcp", "localhost:8080")
