@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"strings"
+	"time"
 )
 
 // Route represents a server route with a handler function
@@ -213,7 +214,10 @@ func formatResponse(resp *Response) string {
 
 	result := fmt.Sprintf("HTTP/1.1 %d %s\r\n", resp.StatusCode, statusText)
 
-	
+	// Add Date header if not present
+	if _, ok := resp.Headers["Date"]; !ok {
+		resp.Headers["Date"] = time.Now().UTC().Format("Mon, 02 Jan 2006 15:04:05 GMT")
+	}
 }
 
 // parseHttpRequest parses an HTTP request string into its components
