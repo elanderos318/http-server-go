@@ -54,7 +54,14 @@ func (s *Server) AddRoute(method, path string, handler func(request *Request, re
 func parseQueryParams(path string) (string, map[string]string) {
 	params := make(map[string]string)
 
-	//
+	// split path and query string
+	parts := strings.SplitN(path, "?", 2)
+	if len(parts) < 2 {
+		return path, params
+	}
+
+	// parse query parameters
+	queryString := parts[1]
 }
 
 func main() {
