@@ -142,7 +142,7 @@ func parseHttpRequest(requestString string) *Request {
 	// parse body (everything after the empty line)
 	body := ""
 	if headerBodySplit > 0 && headerBodySplit < len(lines)-1 {
-		body = strings.Join(lines[headerBodySplit+1:], "\r\n"))
+		body = strings.Join(lines[headerBodySplit+1:], "\r\n")
 	}
 
 	return &Request{
