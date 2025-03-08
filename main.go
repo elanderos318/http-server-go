@@ -152,6 +152,15 @@ func parseHttpRequest(requestString string) *Request {
 			path, queryParams = parseQueryParams(rawPath)
 		}
 	}
+
+	// find where headers end and body begins
+	headerBodySplit := -1
+	for i, line := range lines {
+		if line == "" {
+			headerBodySplit = i
+			break
+		}
+	}
 }
 
 // parseHttpRequest parses an HTTP request string into its components
