@@ -299,7 +299,7 @@ func main() {
 		resp.Body = "Hello, World!"
 	})
 
-	server.AddRoute("GET", "/time", func(req *Request, resp *Reponse) {
+	server.AddRoute("GET", "/time", func(req *Request, resp *Response) {
 		resp.Headers["Content-Type"] = "text/plain"
 		resp.Body = "Current time: " + time.Now().Format("2006-01-02 15:04:05")
 	})
