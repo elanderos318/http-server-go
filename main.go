@@ -244,6 +244,29 @@ func (s *Server) handleConnection(conn net.Conn) {
 	conn.Write([]byte(responseString))
 }
 
+// Start the server on the specified address
+func (s *Server) Start(address string) error {
+	// create a tcp listener
+	listener, err := net.Listen("tcp", address)
+	if err != nil {
+		return err
+	}
+	defer listener.Close()
+
+	fmt.Printf("Server started on %s\n", address)
+
+	// accept connections in a loop
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			fmt.Println("Failed to accept connection:", err)
+			continue
+		}
+
+		go s.handleConnection(conn)
+	}
+}
+
 // func handleConnection(conn net.Conn) {
 // 	defer conn.Close()
 
