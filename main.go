@@ -74,28 +74,6 @@ func parseQueryParams(path string) (string, map[string]string) {
 	return parts[0], params
 }
 
-// func main() {
-// 	// create a tcp listener on port 8080
-// 	listener, err := net.Listen("tcp", "localhost:8080")
-// 	if err != nil {
-// 		fmt.Println("Failed to create listener:", err)
-// 		return
-// 	}
-// 	defer listener.Close()
-// 	fmt.Println("Server started on :8080")
-
-// 	for {
-// 		fmt.Println("Waiting for connection...")
-// 		conn, err := listener.Accept()
-// 		if err != nil {
-// 			fmt.Println("Failed to accept connection:", err)
-// 			continue
-// 		}
-
-// 		go handleConnection(conn)
-// 	}
-// }
-
 // parseHttpRequest parses an HTTP request string into a Request struct
 func parseHttpRequest(requestString string) *Request {
 	headers := make(map[string]string)
