@@ -189,6 +189,18 @@ func parseHttpRequest(requestString string) *Request {
 	}
 }
 
+// matchRoute tries to match a request to a route
+func (s *Server) matchRoute(req *Request) (func(request *Request, response *Response), bool) {
+	for _, route := range s.routes {
+		// Check if method and path match
+		if route.method == req.Method && route.path == req.Path {
+			return route.handler, true
+		}
+	}
+
+	return nil, false
+}
+
 // parseHttpRequest parses an HTTP request string into its components
 // func parseHttpRequest(request string) (method, path string, headers map[string]string, body string) {
 // 	// initialize the headers map
