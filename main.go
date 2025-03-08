@@ -173,50 +173,64 @@ func parseHttpRequest(requestString string) *Request {
 			headers[parts[0]] = parts[1]
 		}
 	}
+
+	// parse body (everything after the empty line)
+	body := ""
+	if headerBodySplit > 0 && headerBodySplit < len(lines)-1 {
+		body = strings.Join(lines[headerBodySplit+1:], "\r\n"))
+	}
+
+	return &Request{
+		Method: method,
+		Path: path,
+		Headers: headers,
+		Body: body,
+		QueryParams: queryParams,
+	}
 }
 
 // parseHttpRequest parses an HTTP request string into its components
-func parseHttpRequest(request string) (method, path string, headers map[string]string, body string) {
-	// initialize the headers map
-	headers = make(map[string]string)
+// func parseHttpRequest(request string) (method, path string, headers map[string]string, body string) {
+// 	// initialize the headers map
+// 	headers = make(map[string]string)
 
-	// split the request into lines
-	lines := strings.Split(request, "\r\n")
+// 	// split the request into lines
+// 	lines := strings.Split(request, "\r\n")
 
-	// parse the request line (first line)
-	if len(lines) > 0 {
-		requestLineParts := strings.Split(lines[0], " ")
-		if len(requestLineParts) >= 2 {
-			method = requestLineParts[0]
-			path = requestLineParts[1]
-		}
-	}
+// 	// parse the request line (first line)
+// 	if len(lines) > 0 {
+// 		requestLineParts := strings.Split(lines[0], " ")
+// 		if len(requestLineParts) >= 2 {
+// 			method = requestLineParts[0]
+// 			path = requestLineParts[1]
+// 		}
+// 	}
 
-	// find where headers end and body begins
-	headerBodySplit := -1
-	for i, line := range lines {
-		if line == "" {
-			headerBodySplit = i
-			break
-		}
-	}
+// 	// find where headers end and body begins
+// 	headerBodySplit := -1
+// 	for i, line := range lines {
+// 		if line == "" {
+// 			headerBodySplit = i
+// 			break
+// 		}
+// 	}
 
-	// parse headers (skip first line which is the request line)
-	for i := 1; i < headerBodySplit; i++ {
-		if lines[i] == "" {
-			continue
-		}
+// 	// parse headers (skip first line which is the request line)
+// 	for i := 1; i < headerBodySplit; i++ {
+// 		if lines[i] == "" {
+// 			continue
+// 		}
 
-		parts := strings.SplitN(lines[i], ": ", 2)
-		if len(parts) == 2 {
-			headers[parts[0]] = parts[1]
-		}
-	}
+// 		parts := strings.SplitN(lines[i], ": ", 2)
+// 		if len(parts) == 2 {
+// 			headers[parts[0]] = parts[1]
+// 		}
+// 	}
 
-	// Parse body (everything after the empty line)
-	if headerBodySplit > 0 && headerBodySplit < len(lines)-1 {
-		body = strings.Join(lines[headerBodySplit+1:], "\r\n")
-	}
+// 	// Parse body (everything after the empty line)
+// 	if headerBodySplit > 0 && headerBodySplit < len(lines)-1 {
+// 		body = strings.Join(lines[headerBodySplit+1:], "\r\n")
+// 	}
 
-	return method, path, headers, body
-}
+// 	return method, path, headers, body
+// }
