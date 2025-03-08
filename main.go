@@ -201,6 +201,21 @@ func (s *Server) matchRoute(req *Request) (func(request *Request, response *Resp
 	return nil, false
 }
 
+// formatResponse formats a Response struct into an HTTP response string
+func formatResponse(resp *Response) string {
+	// Start with status line
+	statusText := "OK"
+	if resp.StatusCode != 200 {
+		statusText = "Not Found"
+	} else if resp.StatusCode == 500 {
+		statusText = "Internal Server Error"
+	}
+
+	result := fmt.Sprintf("HTTP/1.1 %d %s\r\n", resp.StatusCode, statusText)
+
+	
+}
+
 // parseHttpRequest parses an HTTP request string into its components
 // func parseHttpRequest(request string) (method, path string, headers map[string]string, body string) {
 // 	// initialize the headers map
