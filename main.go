@@ -74,27 +74,27 @@ func parseQueryParams(path string) (string, map[string]string) {
 	return parts[0], params
 }
 
-func main() {
-	// create a tcp listener on port 8080
-	listener, err := net.Listen("tcp", "localhost:8080")
-	if err != nil {
-		fmt.Println("Failed to create listener:", err)
-		return
-	}
-	defer listener.Close()
-	fmt.Println("Server started on :8080")
+// func main() {
+// 	// create a tcp listener on port 8080
+// 	listener, err := net.Listen("tcp", "localhost:8080")
+// 	if err != nil {
+// 		fmt.Println("Failed to create listener:", err)
+// 		return
+// 	}
+// 	defer listener.Close()
+// 	fmt.Println("Server started on :8080")
 
-	for {
-		fmt.Println("Waiting for connection...")
-		conn, err := listener.Accept()
-		if err != nil {
-			fmt.Println("Failed to accept connection:", err)
-			continue
-		}
+// 	for {
+// 		fmt.Println("Waiting for connection...")
+// 		conn, err := listener.Accept()
+// 		if err != nil {
+// 			fmt.Println("Failed to accept connection:", err)
+// 			continue
+// 		}
 
-		go handleConnection(conn)
-	}
-}
+// 		go handleConnection(conn)
+// 	}
+// }
 
 // parseHttpRequest parses an HTTP request string into a Request struct
 func parseHttpRequest(requestString string) *Request {
@@ -265,6 +265,59 @@ func (s *Server) Start(address string) error {
 		}
 
 		go s.handleConnection(conn)
+	}
+}
+
+func main() {
+	// create a new server
+	server := NewServer()
+
+	// add some routes
+	server.AddRoute("GET", "/", func(req *Request, resp *Response) {
+		resp.Headers["Content-Type"] = "text/html"
+		resp.Body = `
+		<!DOCTYPE html>
+		<html>
+		<head>
+			<title>Custom HTTP Server</title>
+		</head>
+		<body>
+			<h1>Welcome to our custom HTTP server!</h1>
+			<p>This server is built from scratch in Go without using the standard HTTP library.</p>
+			<ul>
+				<li><a href="/hello">Hello Page</a></li>
+				<li><a href="/time">Current Time</a></li>
+				<li><a href="/echo?message=Hello">Echo Page</a></li>
+			</ul>
+		</body>
+		</html>
+		`
+	})
+
+	server.AddRoute("GET", "/hello", func(req *Request, resp *Response) {
+		resp.Headers["Content-Type"] = "text/plain"
+		resp.Body = "Hello, World!"
+	})
+
+	server.AddRoute("GET", "/time", func(req *Request, resp *Reponse) {
+		resp.Headers["Content-Type"] = "text/plain"
+		resp.Body = "Current time: " + time.Now().Format("2006-01-02 15:04:05")
+	})
+
+	server.AddRoute("GET", "/echo", func(req *Request, resp *Response) {
+		message, ok := req.QueryParams["message"]
+		if !ok {
+			message = "No message provided"
+		}
+
+		resp.Headers["Content-Type"] = "text/plain"
+		resp.Body = "Echo: " + message
+	})
+
+	// start the server
+	err := server.Start("localhost:8080")
+	if err != nil {
+		fmt.Println("Failed to start server:", err)
 	}
 }
 
