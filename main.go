@@ -161,6 +161,18 @@ func parseHttpRequest(requestString string) *Request {
 			break
 		}
 	}
+
+	// parse headers (skip first line which is the request line)
+	for i := 1; i < headerBodySplit; i++ {
+		if lines[i] == "" {
+			continue
+		}
+
+		parts := strings.SplitN(lines[i], ": ", 2)
+		if len(parts) == 2 {
+			headers[parts[0]] = parts[1]
+		}
+	}
 }
 
 // parseHttpRequest parses an HTTP request string into its components
