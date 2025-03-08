@@ -257,6 +257,7 @@ func (s *Server) Start(address string) error {
 
 	// accept connections in a loop
 	for {
+		fmt.Println("Waiting for connection...")
 		conn, err := listener.Accept()
 		if err != nil {
 			fmt.Println("Failed to accept connection:", err)
