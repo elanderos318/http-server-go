@@ -62,6 +62,14 @@ func parseQueryParams(path string) (string, map[string]string) {
 
 	// parse query parameters
 	queryString := parts[1]
+	for _, param := range strings.Split(queryString, "&") {
+		keyValue := strings.SplitN(param, "=", 2)
+		if len(keyValue) == 2 {
+			params[keyValue[0]] = keyValue[1]
+		}
+	}
+
+	return parts[0], params
 }
 
 func main() {
