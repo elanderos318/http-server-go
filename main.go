@@ -229,41 +229,54 @@ func (s *Server) handleConnection(conn net.Conn) {
 		},
 		Body: ""
 	}
-}
 
-func handleConnection(conn net.Conn) {
-	defer conn.Close()
-
-	// Print connection info
-	fmt.Printf("New connection from %s\n", conn.RemoteAddr().String())
-
-	// read data from the connection
-	buffer := make([]byte, 1024)
-	n, err := conn.Read(buffer)
-	if err != nil {
-		fmt.Println("Error reading from connection:", err)
-		return
+	// try to match a route
+	if handler, found := s.matchRoute(request); found {
+		handler(request, response)
+	} else {
+		// No route found, send 404 response
+		response.StatusCode = 404
+		response.Body = "404 Not Found: " + request.Path
 	}
 
-	request := string(buffer[:n])
-	fmt.Printf("Received request:\n%s\n", request)
-
-	method, path, headers, body := parseHttpRequest(request)
-
-	fmt.Printf("Method: %s\n", method)
-	fmt.Printf("Path: %s\n", path)
-	fmt.Printf("Number of headers: %d\n", len(headers))
-	fmt.Printf("Body length: %d bytes\n", len(body))
-
-	// print the data received
-	fmt.Printf("Received %d bytes\n", n)
-	fmt.Println(request)
-
-	// send a response
-	response := "HTTP/1.1 200 OK\r\n" +
-		"Content-Type: text/plain\r\n" +
-		"Content-Length: 13\r\n" +
-		"\r\n" +
-		"Hello from server!\n"
-	conn.Write([]byte(response))
+	// Format and send the response
+	responseString := formatResponse(response)
+	conn.Write([]byte(responseString))
 }
+
+// func handleConnection(conn net.Conn) {
+// 	defer conn.Close()
+
+// 	// Print connection info
+// 	fmt.Printf("New connection from %s\n", conn.RemoteAddr().String())
+
+// 	// read data from the connection
+// 	buffer := make([]byte, 1024)
+// 	n, err := conn.Read(buffer)
+// 	if err != nil {
+// 		fmt.Println("Error reading from connection:", err)
+// 		return
+// 	}
+
+// 	request := string(buffer[:n])
+// 	fmt.Printf("Received request:\n%s\n", request)
+
+// 	method, path, headers, body := parseHttpRequest(request)
+
+// 	fmt.Printf("Method: %s\n", method)
+// 	fmt.Printf("Path: %s\n", path)
+// 	fmt.Printf("Number of headers: %d\n", len(headers))
+// 	fmt.Printf("Body length: %d bytes\n", len(body))
+
+// 	// print the data received
+// 	fmt.Printf("Received %d bytes\n", n)
+// 	fmt.Println(request)
+
+// 	// send a response
+// 	response := "HTTP/1.1 200 OK\r\n" +
+// 		"Content-Type: text/plain\r\n" +
+// 		"Content-Length: 13\r\n" +
+// 		"\r\n" +
+// 		"Hello from server!\n"
+// 	conn.Write([]byte(response))
+// }
