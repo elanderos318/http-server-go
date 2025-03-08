@@ -131,6 +131,29 @@ func handleConnection(conn net.Conn) {
 	conn.Write([]byte(response))
 }
 
+// parseHttpRequest parses an HTTP request string into a Request struct
+func parseHttpRequest(requestString string) *Request {
+	headers := make(map[string]string)
+	queryParams := make(map[string]string)
+
+	// split the request into lines
+	lines := strings.Split(requestString, "\r\n")
+
+	// parse the request line (first line
+	method := ""
+	path := ""
+	if len(lines) > 0 {
+		requestLineParts := strings.Split(lines[0], " ")
+		if len(requestLineParts) >= 2 {
+			method = requestLineParts[0]
+			rawPath := requestLineParts[1]
+
+			// parse query parameters
+			path, queryParams = parseQueryParams(rawPath)
+		}
+	}
+}
+
 // parseHttpRequest parses an HTTP request string into its components
 func parseHttpRequest(request string) (method, path string, headers map[string]string, body string) {
 	// initialize the headers map
