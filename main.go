@@ -199,6 +199,38 @@ func formatResponse(resp *Response) string {
 	return result
 }
 
+// handleConnection handles a client connection
+func (s *Server) handleConnection(conn net.Conn) {
+	defer conn.Close()
+
+	// Print connection info
+	fmt.Printf("New connection from %s\n", conn.RemoteAddr().String())
+
+	// Read request data
+	buffer := make([]byte, 4096)
+	n, err := conn.Read(buffer)
+	if err != nil {
+		fmt.Println("Error reading from connection:", err)
+		return
+	}
+
+	requestString := string(buffer[:n])
+	fmt.Printf("Received request:\n%s\n", requestString)
+
+	// Parse the HTTP request
+	request := parseHttpRequest(requestString)
+
+	// Create a default response
+	response := &Response{
+		StatusCode: 200,
+		Headers: map[string]string{
+			"Content-Type": "text/plain",
+			"Server": "GoCustomHTTP/1.0",
+		},
+		Body: ""
+	}
+}
+
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
 
