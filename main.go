@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -218,6 +219,21 @@ func formatResponse(resp *Response) string {
 	if _, ok := resp.Headers["Date"]; !ok {
 		resp.Headers["Date"] = time.Now().UTC().Format("Mon, 02 Jan 2006 15:04:05 GMT")
 	}
+
+	// Add Content-Length header if not present
+	if _, ok := resp.Headers["Content-Length"]; !ok {
+		resp.Headers["Content-Length"] = strconv.Itoa(len(resp.Body))
+	}
+
+	// Add headers
+	for key, value := range resp.Headers {
+		result += fmt.Sprintf("%s: %s\r\n", key, value)
+	}
+
+	// add empty line and body
+	result += "\r\n" + resp.Body
+
+	return result
 }
 
 // parseHttpRequest parses an HTTP request string into its components
