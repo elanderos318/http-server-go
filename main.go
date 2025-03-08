@@ -146,10 +146,10 @@ func parseHttpRequest(requestString string) *Request {
 	}
 
 	return &Request{
-		Method: method,
-		Path: path,
-		Headers: headers,
-		Body: body,
+		Method:      method,
+		Path:        path,
+		Headers:     headers,
+		Body:        body,
 		QueryParams: queryParams,
 	}
 }
@@ -225,9 +225,9 @@ func (s *Server) handleConnection(conn net.Conn) {
 		StatusCode: 200,
 		Headers: map[string]string{
 			"Content-Type": "text/plain",
-			"Server": "GoCustomHTTP/1.0",
+			"Server":       "GoCustomHTTP/1.0",
 		},
-		Body: ""
+		Body: "",
 	}
 
 	// try to match a route
